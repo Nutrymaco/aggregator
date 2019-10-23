@@ -1,7 +1,7 @@
 # aggregator
 Web-application to search it-vacancies
 
-Некоторые пояснения:
+Используемы технологии:
   1) Бэкенд - Django.
   2) Кэширования - Redis.
   3) Асинхронные задачи - Celery. 
