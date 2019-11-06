@@ -11,6 +11,6 @@ class Config:
     enable_utc = True
     imports = ('storage.tasks',)
     beat_schedule = schedule
-    django_settings_module = '/Users/smykovefim/MyProjects/commerce/master/agregator/agregator/settings.py'
+    django_settings_module = '/Users/smykovefim/MyProjects/Django/aggregator/aggregator/settings.py'
 
 
