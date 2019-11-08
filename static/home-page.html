@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Page</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <style type="text/css">
+      html {
+        box-sizing: border-box;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, Roboto, Ubuntu, "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+        font-size: 0.875rem;
+        color: #3d3d3d;
+        background-color: #f7f7f7;
+        word-wrap: break-word;
+      }
+
+      button::-moz-focus-inner,
+      [type="button"]::-moz-focus-inner {
+        padding: 0;
+        border-style: none;
+      }
+
+      @-moz-document url-prefix() {}
+
+      .button {
+        position: relative;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        vertical-align: middle;
+        height: 2rem;
+        padding: 0 1rem;
+        font-size: 0.875rem;
+        font-family: inherit;
+        text-align: center;
+        text-decoration: none;
+        text-transform: none;
+        color: #3d3d3d;
+        background-color: white;
+        border: 1px solid #d4d4d4;
+        border-radius: 0.1875rem;
+        text-overflow: ellipsis;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+
+      .button:hover,
+      .button:focus {
+        z-index: 2;
+        background-color: #f7f7f7;
+        border-color: #bababa;
+      }
+
+      .button:active,
+      .button:focus {
+        outline: none;
+        box-shadow: 0 0 2px 2px rgba(19, 146, 236, 0.3);
+        border-color: #1392ec;
+        z-index: 3;
+      }
+
+      .button:disabled {
+        background-color: #e6e6e6;
+        color: gray;
+        cursor: default;
+        pointer-events: none;
+      }
+
+      .button--primary {
+        z-index: 10;
+        color: white;
+        background-color: #1392ec;
+        border: 0;
+      }
+
+      .button--primary:hover,
+      .button--primary:focus {
+        background-color: #1289de;
+      }
+
+      .checkbox__native-control:not(:disabled):hover ~ .checkbox__indicator::before {
+        border-color: #bababa;
+      }
+
+      .checkbox__native-control:not(:disabled):focus ~ .checkbox__indicator::before {
+        outline: none;
+        box-shadow: 0 0 2px 2px rgba(19, 146, 236, 0.3);
+        border-color: #1392ec;
+      }
+
+      .control-group {
+        display: flex;
+      }
+
+      .control-group > .button:not(:first-child) {
+        margin-left: -1px;
+      }
+
+      .control-group > .button:not(:first-child) {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+
+      .control-group > .text-field:not(:last-child) .text-field__native-control {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      .control-group > .text-field {
+        flex: 1;
+      }
+
+      .counter__native-control:not(:disabled):hover {
+        z-index: 2;
+        border-color: #bababa;
+      }
+
+      .counter__native-control:not(:disabled):focus {
+        outline: none;
+        box-shadow: 0 0 2px 2px rgba(19, 146, 236, 0.3);
+        border-color: #1392ec;
+        z-index: 3;
+      }
+
+      .radio__native-control:not(:disabled):hover ~ .radio__indicator::before {
+        border-color: #bababa;
+      }
+
+      .radio__native-control:not(:disabled):focus ~ .radio__indicator::before {
+        outline: none;
+        box-shadow: 0 0 2px 2px rgba(19, 146, 236, 0.3);
+        border-color: #1392ec;
+      }
+
+      .select__native-control:not(:disabled):hover {
+        z-index: 2;
+        border-color: #bababa;
+      }
+
+      .select__native-control:not(:disabled):focus {
+        outline: none;
+        box-shadow: 0 0 2px 2px rgba(19, 146, 236, 0.3);
+        border-color: #1392ec;
+        z-index: 3;
+      }
+
+      .text-field {
+        display: block;
+        vertical-align: middle;
+      }
+
+      .text-field__control {
+        position: relative;
+        display: block;
+      }
+
+      .text-field__native-control {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 2rem;
+        padding: 0 1rem;
+        font-size: 0.875rem;
+        font-family: inherit;
+        color: #3d3d3d;
+        background-color: white;
+        border: 1px solid #d4d4d4;
+        border-radius: 0.1875rem;
+        -webkit-appearance: textfield;
+        -moz-appearance: textfield;
+        appearance: textfield;
+      }
+
+      .text-field__native-control:not(:disabled):hover {
+        z-index: 2;
+        border-color: #bababa;
+      }
+
+      .text-field__native-control:not(:disabled):focus {
+        outline: none;
+        box-shadow: 0 0 2px 2px rgba(19, 146, 236, 0.3);
+        border-color: #1392ec;
+        z-index: 3;
+      }
+
+      .text-field__native-control:disabled {
+        background-color: #e6e6e6;
+        color: gray;
+      }
+
+      .text-field__native-control::-webkit-input-placeholder {
+        color: #a1a1a1;
+        opacity: 1;
+      }
+
+      .text-field__native-control::-moz-placeholder {
+        color: #a1a1a1;
+        opacity: 1;
+      }
+
+      .text-field__native-control:-ms-input-placeholder {
+        color: #a1a1a1;
+        opacity: 1;
+      }
+
+      .text-field__native-control::-ms-input-placeholder {
+        color: #a1a1a1;
+        opacity: 1;
+      }
+
+      .home-page {
+        width: 100%;
+        height: 100%;
+        flex: 1;
+      }
+
+      .home-page__inner {
+        width: 80%;
+        max-width: 640px;
+        margin: 160px auto 0 auto;
+      }
+
+      .home-page__logo {
+        position: relative;
+        width: 50px;
+        height: 50px;
+        margin: 0 auto;
+        background-image: url("img/logo.svg");
+        background-size: 100%;
+        background-repeat: no-repeat;
+      }
+
+      .home-page__search-bar {
+        margin-top: 24px;
+      }
+    </style>
+    <div class="home-page">
+      <div class="home-page__inner">
+        <div class="home-page__logo"></div>
+        <div class="home-page__search-bar">
+          <form method="POST">
+            {% csrf_token %}
+            <div class="control-group" role="group">
+              <span class="text-field">
+                <span class="text-field__control">
+                  <input class="text-field__native-control" type="text" autofocus="off" name="text">
+                </span>
+              </span>
+              <button class="button button--primary" type="submit">
+                <span class="button__text">Найти</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
