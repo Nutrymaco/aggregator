@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'bolq30vvf)wpm&r8(x2%$j#0sd^@2zmhfy_!@@ryob8v&7g$8@'
+SECRET_KEY = 'rlttn@n6y4bo!d-!w5v_@^wprb_o6)nm9=ex!$ipg10wx#gguq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'storage',
-    'aggregator'
+    'word_parse'
 ]
 
 MIDDLEWARE = [
@@ -56,8 +56,7 @@ ROOT_URLCONF = 'aggregator.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': ['static', 'static/img'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,19 +78,10 @@ WSGI_APPLICATION = 'aggregator.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'aggregator',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'db',
         'PORT': 5432
-    }
-}
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'TIMEOUT': 24*3600
-    },
-    'recovery': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'TIMEOUT': 24*3600
     }
 }
 
@@ -120,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -133,3 +123,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REDIS_URL = 'redis://redis:6379'
+
+
+# celery settings
+
+from celery.schedules import crontab
+from storage.schedules import beat_schedule
+
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_IMPORTS = ('storage.tasks')
+CELERY_BEAT_SCHEDULE = beat_schedule
+CELERY_TIMEZONE = 'Europe/Moscow'
