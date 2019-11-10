@@ -24,13 +24,18 @@ def delete_tags(text) -> str:
 def get_id_list_from_text(text, prefix='word_') -> list:
     key_words = lemmatization(text)
     r = redis.Redis(host='redis', port=6379)
-    id_list = list()
+    full_id_set = set()
+
 
     for key_word in key_words:
-        key_word_id_list = r.hkeys(prefix+key_word)
+        text_id_list = r.hkeys(prefix+key_word)
 
-        for id in key_word_id_list:
-            if id not in id_list:
-                    id_list.append(id)
+        if not full_id_set:
+            print('new')
+            full_id_set = set(text_id_list)
+        else:
+            print(f'update with het = {text_id_list}')
+            full_id_set = full_id_set & set(text_id_list)
 
-    return id_list
+
+    return list(full_id_set)

@@ -20,8 +20,8 @@ def write_to_cache(text, text_index, prefix='word_'):
                    ['PREP', 'INTJ', 'PRCL', 'PRED', 'CONJ']):
                 continue
             normal_word = result.normal_form
-            if r.exists(normal_word):
-                if r.hexists(normal_word, text_index):
+            if r.exists(prefix + normal_word):
+                if r.hexists(prefix + normal_word, text_index):
                     r.hincrby(prefix + normal_word, text_index, 1)
                 else:
                     r.hset(prefix + normal_word, text_index, 1)
@@ -53,9 +53,11 @@ def hh_scrapper(base_url='https://api.hh.ru/vacancies', start_shift=24*3600, spe
 
                 if not Vacancy.objects.filter(id=response['id']):
                     # TODO: refactor db
+                    description = delete_tags(response['description'])
                     vacancy = Vacancy.objects.create(name=response['name'], company=response['employer']['name'],
-                                                     long_description=response['description'], id=response['id'],
-                                                     url=response['alternate_url'], salary_to=response['salary']['to'],
+                                                     long_description=description, short_description=description[:64],
+                                                     id=response['id'], url=response['alternate_url'],
+                                                     salary_to=response['salary']['to'],
                                                      salary_from=response['salary']['from'])
                     vacancy.save()
 
@@ -63,7 +65,7 @@ def hh_scrapper(base_url='https://api.hh.ru/vacancies', start_shift=24*3600, spe
                     text_index = vacancy.id
                     text = vacancy.long_description
 
-                    write_to_cache.delay(text, text_index)
+                    write_to_cache.delay(vacancy.name + ' ' + text, text_index)
                     actual_id_vacancies_list.append(text_index)
 
     else:
@@ -97,25 +99,33 @@ def hh_scrapper(base_url='https://api.hh.ru/vacancies', start_shift=24*3600, spe
                 # final point
                 for vac in response['items']:
                     response = requests.get(vac['url']).json()
+
                     if not Vacancy.objects.filter(id=response['id']):
-                        # TODO: refactor db
+
+                        if not response['salary']:
+                            salary_from = salary_to = 0
+                        else:
+                            salary_to = response['salary']['to']
+                            salary_from = response['salary']['from']
+
+                        description = delete_tags(response['description'])
                         vacancy = Vacancy.objects.create(name=response['name'], company=response['employer']['name'],
-                                                         long_description=response['description'], id=response['id'],
-                                                         url=response['alternate_url'], salary_to=response['salary']['to'],
-                                                         salary_from=response['salary']['from'])
+                                                         long_description=description,
+                                                         short_description=description[:64],
+                                                         id=response['id'], url=response['alternate_url'],
+                                                         salary_to=salary_to, salary_from=salary_from)
                         vacancy.save()
 
                         # adding to redis cache
                         text_index = vacancy.id
                         text = vacancy.long_description
 
-                        write_to_cache.delay(text, text_index)
+                        write_to_cache.delay(vacancy.name + ' ' + text, text_index)
                         actual_id_vacancies_list.append(text_index)
 
             date = datetime.fromtimestamp(time - start_shift).strftime("%Y-%m-%dT%H:%M:%S")
             time -= start_shift
             start_shift = 24*3600
-
 
     all_id_list = Vacancy.objects.values_list('id')
     id_to_delete = [id_v for id_v in all_id_list if id_v not in actual_id_vacancies_list]

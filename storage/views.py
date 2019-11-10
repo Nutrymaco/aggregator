@@ -6,15 +6,13 @@ from .models import Vacancy
 from django.template.loader import get_template
 
 
-
-
 def vacancies(request):
-
     if request.method == 'POST':
         text = request.POST['text']
 
         id_vacancies = get_id_list_from_text(text)
-        vacancy_list = Vacancy.objects.filter(id__in=id_vacancies)[:20]
+        vacancy_list = Vacancy.objects.filter(id__in=id_vacancies).values('name', 'short_description', 'company',
+                                                                          'salary_from', 'salary_to')
         print(vacancy_list)
         return render(request, 'list.html', {'vacancy_list': vacancy_list})
     return render(request, 'home-page.html')
