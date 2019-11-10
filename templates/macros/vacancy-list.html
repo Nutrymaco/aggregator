@@ -1,0 +1,18 @@
+{% from 'macros/vacancy-card.njk' import VacancyCard %}
+
+{% macro VacancyList(vacancies=[]) %}
+  <ul class="vacancy-list">
+    {% for vacancy in vacancies %}
+      <li class="vacancy-list__item">
+        {% call VacancyCard(
+          vacancy.name,
+          vacancy.company,
+          vacancy.salary_from|default(none),
+          vacancy.salary_to|default(none)
+        ) %}
+          Краткое описание...
+        {% endcall %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endmacro %}

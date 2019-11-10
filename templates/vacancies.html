@@ -1,0 +1,36 @@
+{% load 'static' %}
+
+{% from 'macros/vacancy-list.html' import VacancyList %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Page</title>
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+  </head>
+  <body>
+    <div class="page">
+      <div class="page__header">
+        <div class="page__logo"></div>
+        <div class="page__search-bar">
+          <div class="control-group " role="group">
+            <span class="text-field  ">
+              <span class="text-field__control">
+                <input class="text-field__native-control" type="text">
+              </span>
+            </span>
+            <button class="button button--primary " type="button">
+              <span class="button__text">Найти</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="page__body">
+        <div class="page__content">
+          {{ VacancyList(vacancy_list) }}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

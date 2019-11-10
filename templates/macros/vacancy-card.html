@@ -1,0 +1,26 @@
+{% macro VacancyCard(name, company, salary_from, salary_to) %}
+  <div class="vacancy-card">
+    <header class="vacancy-card__header">
+      <div class="vacancy-card__header-top">
+        <div class="vacancy-card__name">{{ name }}</div>
+        {% if salary_from or salary_to %}
+          <div class="vacancy-card__salary">
+          {% if salary_from and salary_to %}
+            <span>{{ salary_from }}</span> - <span>{{ salary_to }} р.</span>  
+          {% elif salary_from %}
+            <span>от {{ salary_from }} р.</span>
+          {% elif salary_to %}
+            <span>до {{ salary_to }} р.</span>
+          {% endif %}
+          </div>  
+        {% endif %}  
+      </div>
+      <div class="vacancy-card__header-bottom">
+        <div class="vacancy-card__meta-info">{{ company }}</div>    
+      </div>
+    </header>
+    <div class="vacancy-card__body">
+      {{ caller() }}        
+    </div>
+  </div>
+{% endmacro %}
