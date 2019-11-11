@@ -1,4 +1,4 @@
-{% from 'macros/vacancy-card.njk' import VacancyCard %}
+{% from 'macros/vacancy-card.html' import VacancyCard %}
 
 {% macro VacancyList(vacancies=[]) %}
   <ul class="vacancy-list">
@@ -8,9 +8,9 @@
           vacancy.name,
           vacancy.company,
           vacancy.salary_from|default(none),
-          vacancy.salary_to|default(none)
+          vacancy.salary_to|default(none),
+          vacancy.short_description,
         ) %}
-          Краткое описание...
         {% endcall %}
       </li>
     {% endfor %}

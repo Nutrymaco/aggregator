@@ -14,5 +14,5 @@ def vacancies(request):
         vacancy_list = Vacancy.objects.filter(id__in=id_vacancies).values('name', 'short_description', 'company',
                                                                           'salary_from', 'salary_to')
         print(vacancy_list)
-        return render(request, 'list.html', {'vacancy_list': vacancy_list})
-    return render(request, 'home-page.html')
+        return render(request, 'vacancies.html', {'vacancy_list': vacancy_list})
+    return render(request, 'home.html')

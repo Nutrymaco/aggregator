@@ -1,4 +1,4 @@
-{% macro VacancyCard(name, company, salary_from, salary_to) %}
+{% macro VacancyCard(name, company, salary_from, salary_to, short_description) %}
   <div class="vacancy-card">
     <header class="vacancy-card__header">
       <div class="vacancy-card__header-top">
@@ -20,6 +20,7 @@
       </div>
     </header>
     <div class="vacancy-card__body">
+      {{ short_description }}
       {{ caller() }}        
     </div>
   </div>

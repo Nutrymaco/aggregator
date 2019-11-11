@@ -30,7 +30,9 @@ def write_to_cache(text, text_index, prefix='word_'):
     sleep(3)
 
 
-# TODO: set up settings.py for redis
+# TO-DO: set up settings.py for redis
+# TO-DO: add indexes and transactions
+# TO-DO: refactor write to bd (create)
 @app.task
 def hh_scrapper(base_url='https://api.hh.ru/vacancies', start_shift=24*3600, specialization_list=[1]):
     now_datetime = datetime.now()
