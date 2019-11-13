@@ -8,8 +8,8 @@ class Vacancy(models.Model):
     name = models.CharField(max_length=128, blank=True, null=True, default='Worker')
     company = models.CharField(max_length=128, blank=True, null=True, default='Company')
     url = models.URLField(verbose_name='URL', default='https://hh.ru')
-    salary_to = models.CharField(verbose_name='salary to', default='0', max_length=10, null=True)
-    salary_from = models.CharField(verbose_name='salary from', default='0', max_length=10, null=True)
+    salary_to = models.CharField(verbose_name='salary to', default='', max_length=10, null=True)
+    salary_from = models.CharField(verbose_name='salary from', default='', max_length=10, null=True)
 
     class Meta:
         db_table = 'vacancy'

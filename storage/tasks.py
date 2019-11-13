@@ -55,12 +55,24 @@ def hh_scrapper(base_url='https://api.hh.ru/vacancies', start_shift=24*3600, spe
 
                 if not Vacancy.objects.filter(id=response['id']):
                     # TODO: refactor db
+
+                    if not response['salary']:
+                        salary_from = salary_to = ''
+                    else:
+                        salary_from = response['salary']['from']
+                        salary_to = response['salary']['to']
+
+                        if salary_to == 'null':
+                            salary_to = ''
+                        elif salary_from == 'null':
+                            salary_from = ''
+
                     description = delete_tags(response['description'])
                     vacancy = Vacancy.objects.create(name=response['name'], company=response['employer']['name'],
-                                                     long_description=description, short_description=description[:64],
+                                                     long_description=description,
+                                                     short_description=description[:64],
                                                      id=response['id'], url=response['alternate_url'],
-                                                     salary_to=response['salary']['to'],
-                                                     salary_from=response['salary']['from'])
+                                                     salary_to=salary_to, salary_from=salary_from)
                     vacancy.save()
 
                     # adding to redis cache
