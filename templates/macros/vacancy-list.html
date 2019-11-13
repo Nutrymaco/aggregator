@@ -4,14 +4,13 @@
   <ul class="vacancy-list">
     {% for vacancy in vacancies %}
       <li class="vacancy-list__item">
-        {% call VacancyCard(
+        {{ VacancyCard(
           vacancy.name,
           vacancy.company,
           vacancy.salary_from|default(none),
           vacancy.salary_to|default(none),
-          vacancy.short_description,
-        ) %}
-        {% endcall %}
+          vacancy.short_description
+        ) }}
       </li>
     {% endfor %}
   </ul>
