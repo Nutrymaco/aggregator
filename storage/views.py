@@ -8,15 +8,16 @@ import json
 
 
 def vacancies(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
         text = request.POST['text']
 
         id_vacancies = get_response_from_cache(text)
-        vacancy_list = Vacancy.objects.filter(id__in=id_vacancies).values('name', 'short_description', 'company',
-                                                                          'salary_from', 'salary_to', 'url')
+        vacancy_list = Vacancy.objects
+            .filter(id__in=id_vacancies)
+            .values('name', 'short_description', 'company', 'salary_from', 'salary_to', 'url')
 
         return render(request, 'vacancies.html', {'vacancy_list': vacancy_list})
-    return render(request, 'home.html')
+    return render(request, 'index.html')
 
 
 # API

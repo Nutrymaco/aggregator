@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Page</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <div class="search">
+      <form class="search__form" id="search-form" action="/vacancies" method="GET">
+        <div class="control-group " role="group">
+          <span class="text-field  ">
+            <span class="text-field__control">
+              <input class="text-field__native-control" type="text" id="search-field" name="text">
+            </span>
+          </span>
+          <button class="button button--primary " type="submit">
+            <span class="button__text">Найти</span>
+          </button>
+        </div>
+      </form>
+      <div class="search__autocomplete" id="search-autocomplete"></div>
+    </div>
+    <script type="text/javascript" src="bundle.js"></script>
+  </body>
+</html>
