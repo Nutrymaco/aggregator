@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'storage',
     'word_parse',
-    'jinja2'
+    'jinja2',
 ]
 
 MIDDLEWARE = [
@@ -138,7 +138,28 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-REDIS_URL = 'redis://redis:6379'
+# Redis settings
+
+INVERT_KEY_WORD_INDEX_REDIS_HOST = 'redis_invert_key_word_index'
+INVERT_KEY_WORD_INDEX_REDIS_PORT = 6379
+
+RESPONSE_CACHE_REDIS_HOST = 'redis_cache_response'
+RESPONSE_CACHE_REDIS_PORT = 6379
+
+WORD_CACHE_REDIS_HOST = 'redis_word_cache'
+WORD_CACHE_REDIS_PORT = 6379
+
+QUERY_TEXT_CACHE_REDIS_HOST = 'redis_query_text'
+QUERY_TEXT_CACHE_REDIS_PORT = 6379
+
+COUPLE_WORD_REDIS_HOST = 'redis_couple_word'
+COUPLE_WORD_REDIS_PORT = 6379
+
+SYNONYM_WORD_REDIS_HOST = 'redis_synonym_word'
+SYNONYM_WORD_REDIS_PORT = 6379
+
+INVERT_TEXT_INDEX_REDIS_HOST = 'redis_invert_text_index'
+INVERT_TEXT_INDEX_REDIS_PORT = 6379
 
 
 # celery settings
@@ -154,3 +175,5 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_IMPORTS = ('storage.tasks')
 CELERY_BEAT_SCHEDULE = beat_schedule
 CELERY_TIMEZONE = 'Europe/Moscow'
+
+

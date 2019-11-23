@@ -6,28 +6,27 @@ import requests
 from datetime import datetime
 import redis
 import json
-from time import sleep
+from aggregator.settings import INVERT_KEY_WORD_INDEX_REDIS_HOST, INVERT_KEY_WORD_INDEX_REDIS_PORT
+
 
 @app.task
-def write_to_cache(text, text_index, prefix='word_'):
+def write_to_cache(text, text_index):
     morph = pymorphy2.MorphAnalyzer()
     text = delete_tags(text)
-    r = redis.Redis(host='redis', port=6379)
+    r = redis.Redis(host=INVERT_KEY_WORD_INDEX_REDIS_HOST, port=INVERT_KEY_WORD_INDEX_REDIS_PORT)
     for word in text.split(' '):
-        if word.isalpha():
+        if not word.isdigit():
             result = morph.parse(word)[0]
             if any(word_type in result.tag for word_type in
                    ['PREP', 'INTJ', 'PRCL', 'PRED', 'CONJ']):
                 continue
             normal_word = result.normal_form
-            if r.exists(prefix + normal_word):
-                if r.hexists(prefix + normal_word, text_index):
-                    r.hincrby(prefix + normal_word, text_index, 1)
-                else:
-                    r.hset(prefix + normal_word, text_index, 1)
-            else:
-                r.hset(prefix + normal_word, text_index, 1)
-    sleep(3)
+            r.sadd(normal_word, text_index)
+
+
+
+
+# TODO: corutine transaction to db
 
 
 # TO-DO: set up settings.py for redis
@@ -143,13 +142,11 @@ def hh_scrapper(base_url='https://api.hh.ru/vacancies', start_shift=24*3600, spe
 
     all_id_list = Vacancy.objects.values_list('id')
     id_to_delete = [id_v for id_v in all_id_list if id_v not in actual_id_vacancies_list]
-    index(id_to_delete)
+    delete_vacancies.delay(id_to_delete)
 
 
-
-
-
-def index(id_to_delete):
+@app.task
+def delete_vacancies(id_to_delete):
     r = redis.Redis(host='redis', port=6379)
 
     # (не)транзакционно удаляем из редиса
@@ -157,7 +154,6 @@ def index(id_to_delete):
     for key in keys:
         for id in id_to_delete:
             r.hdel(key, id)
-
 
     # подчищаем бд
     for vacancy_id in id_to_delete:

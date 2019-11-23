@@ -1,18 +1,32 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from word_parse.parse import get_id_list_from_text
+from storage.cache import get_response_from_cache, get_possible_query_list
 from django.http.response import HttpResponse
 from .models import Vacancy
 from django.template.loader import get_template
+import json
 
 
 def vacancies(request):
     if request.method == 'POST':
         text = request.POST['text']
 
-        id_vacancies = get_id_list_from_text(text)
+        id_vacancies = get_response_from_cache(text)
         vacancy_list = Vacancy.objects.filter(id__in=id_vacancies).values('name', 'short_description', 'company',
                                                                           'salary_from', 'salary_to')
-        print(vacancy_list)
+
         return render(request, 'vacancies.html', {'vacancy_list': vacancy_list})
     return render(request, 'home.html')
+
+
+# API
+def possible_query_list(request):
+    if request.method == 'GET':
+        cur_text = request.GET['text']
+        if cur_text:
+            query_list = get_possible_query_list(cur_text)
+            answer = dict()
+            answer['items'] = query_list
+            return HttpResponse(json.dumps(answer))
+        else:
+            return HttpResponse('no params')

@@ -11,6 +11,34 @@ services:
     image: "redis:alpine"
     ports:
       - "6379"
+  redis_invert_key_word_index:
+    image: "redis:alpine"
+    ports:
+      - "6379"
+  redis_cache_response:
+    image: "redis:alpine"
+    ports:
+      - "6379"
+  redis_word_cache:
+    image: "redis:alpine"
+    ports:
+      - "6379"
+  redis_query_text:
+    image: "redis:alpine"
+    ports:
+      - "6379"
+  redis_couple_word:
+    image: "redis:alpine"
+    ports:
+      - "6379"
+  redis_synonym_word:
+    image: "redis:alpine"
+    ports:
+      - "6379"
+  redis_invert_text_index:
+    image: "redis:alpine"
+    ports:
+      - "6379"
   web:
     build: .
     command: bash -c "python /code/manage.py makemigrations --noinput && python /code/manage.py migrate --noinput && python /code/manage.py runserver 0.0.0.0:8000"
@@ -21,6 +49,13 @@ services:
     depends_on:
       - redis
       - db
+      - redis_invert_key_word_index
+      - redis_cache_response
+      - redis_word_cache
+      - redis_query_text
+      - redis_couple_word
+      - redis_synonym_word
+      - redis_invert_text_index
     restart: on-failure
     links: 
       - db

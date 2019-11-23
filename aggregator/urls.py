@@ -15,9 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from storage.views import vacancies
+from storage.views import vacancies, possible_query_list
+from monitoring.views import cached_query, key_words_invert_index, query_statistic
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('vacancies/', vacancies),
+    path('api/autocomplete/', possible_query_list),
+    path('monitoring/cached_query/', cached_query),
+    path('monitoring/key_words_index/', key_words_invert_index),
+    path('monitoring/query_statistic/', query_statistic)
 ]
