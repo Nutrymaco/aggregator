@@ -22,11 +22,12 @@ def vacancies(request):
 # API
 def possible_query_list(request):
     if request.method == 'GET':
-        cur_text = request.GET['text']
-        if cur_text:
+        try:
+            cur_text = request.GET['text']
             query_list = get_possible_query_list(cur_text)
             answer = dict()
             answer['items'] = query_list
+            answer['text'] = cur_text
             return HttpResponse(json.dumps(answer))
-        else:
-            return HttpResponse('no params')
+        except:
+            return HttpResponse({'{"items":[], "text":""'})
