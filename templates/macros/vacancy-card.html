@@ -1,8 +1,10 @@
-{% macro VacancyCard(name, company, salary_from, salary_to, short_description) %}
+{% macro VacancyCard(name, company, salary_from, salary_to, url, short_description) %}
   <div class="vacancy-card">
     <header class="vacancy-card__header">
       <div class="vacancy-card__header-top">
-        <div class="vacancy-card__name">{{ name }}</div>
+        <div class="vacancy-card__name">
+          <a href="{{ url }}">{{ name }}</a>
+        </div>
         {% if salary_from or salary_to %}
           <div class="vacancy-card__salary">
           {% if salary_from and salary_to %}
