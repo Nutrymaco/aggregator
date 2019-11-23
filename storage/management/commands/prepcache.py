@@ -23,13 +23,8 @@ class Command(BaseCommand):
             'python intern',
             'python стажировка',
             'python flask',
-            'pygam junior'
+            'pygame junior'
         ]
-        '''
-        for vacancy in Vacancy.objects.all():
-            write_to_cache(delete_tags(vacancy.name) + " " + vacancy.long_description, vacancy.id)
-            print(f'{vacancy.name} cached')
-        '''
 
         for query in cache_query_list:
             get_response_from_cache(query)
