@@ -6,14 +6,14 @@ import requests
 from datetime import datetime
 import redis
 import json
-from aggregator.settings import INVERT_KEY_WORD_INDEX_REDIS_HOST, INVERT_KEY_WORD_INDEX_REDIS_PORT
+from aggregator.settings import INVERT_KEY_WORD_INDEX_REDIS_DB, REDIS_HOST
 
 
 @app.task
 def write_to_cache(text, text_index):
     morph = pymorphy2.MorphAnalyzer()
     text = delete_tags(text)
-    r = redis.Redis(host=INVERT_KEY_WORD_INDEX_REDIS_HOST, port=INVERT_KEY_WORD_INDEX_REDIS_PORT)
+    r = redis.Redis(db=INVERT_KEY_WORD_INDEX_REDIS_DB, host=REDIS_HOST)
     for word in text.split(' '):
         if not word.isdigit():
             result = morph.parse(word)[0]
@@ -116,10 +116,14 @@ def hh_scrapper(base_url='https://api.hh.ru/vacancies', start_shift=24*3600, spe
                     if not Vacancy.objects.filter(id=response['id']):
 
                         if not response['salary']:
-                            salary_from = salary_to = 0
+                            salary_from = salary_to = ''
                         else:
                             salary_to = response['salary']['to']
                             salary_from = response['salary']['from']
+                            if salary_to == 'null':
+                                salary_to = ''
+                            elif salary_from == 'null':
+                                salary_from = ''
 
                         description = delete_tags(response['description'])
                         vacancy = Vacancy.objects.create(name=response['name'], company=response['employer']['name'],

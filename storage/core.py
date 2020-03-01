@@ -1,13 +1,13 @@
 from word_parse.parse import lemmatization
 import redis
-from aggregator.settings import INVERT_TEXT_INDEX_REDIS_HOST, INVERT_TEXT_INDEX_REDIS_PORT, \
-    INVERT_KEY_WORD_INDEX_REDIS_HOST, INVERT_KEY_WORD_INDEX_REDIS_PORT, \
-    COUPLE_WORD_REDIS_HOST, COUPLE_WORD_REDIS_PORT
+from aggregator.settings import INVERT_TEXT_INDEX_REDIS_DB, \
+    INVERT_KEY_WORD_INDEX_REDIS_DB, \
+    COUPLE_WORD_REDIS_DB, REDIS_HOST
 
 
 # TODO: improve alghoritm with NLP
 def get_id_dict_from_key_words(key_words) -> dict:
-    r = redis.Redis(host=INVERT_KEY_WORD_INDEX_REDIS_HOST, port=INVERT_KEY_WORD_INDEX_REDIS_PORT)
+    r = redis.Redis(db=INVERT_KEY_WORD_INDEX_REDIS_DB, host=REDIS_HOST)
     id_set = r.sinter([key_word for key_word in key_words])
     id_dict = dict()
     for id in id_set:
@@ -18,8 +18,8 @@ def get_id_dict_from_key_words(key_words) -> dict:
 
 def get_text_score_by_id(text_id, base_key_words):
     score = 0
-    r_invert = redis.Redis(host=INVERT_TEXT_INDEX_REDIS_HOST, port=INVERT_TEXT_INDEX_REDIS_PORT)
-    r_couple = redis.Redis(host=COUPLE_WORD_REDIS_HOST, port=COUPLE_WORD_REDIS_PORT)
+    r_invert = redis.Redis(db=INVERT_TEXT_INDEX_REDIS_DB, host=REDIS_HOST)
+    r_couple = redis.Redis(db=COUPLE_WORD_REDIS_DB, host=REDIS_HOST)
     couple_key_words = []
     for base_key_word in base_key_words:
         couple_key_words.append(r_couple.smembers(base_key_word))

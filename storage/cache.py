@@ -1,14 +1,14 @@
 import redis
 from storage.core import get_id_dict_from_key_words
 from word_parse.parse import lemmatization
-from aggregator.settings import RESPONSE_CACHE_REDIS_HOST, RESPONSE_CACHE_REDIS_PORT, \
-    WORD_CACHE_REDIS_HOST, WORD_CACHE_REDIS_PORT, QUERY_TEXT_CACHE_REDIS_HOST, QUERY_TEXT_CACHE_REDIS_PORT, \
-    INVERT_KEY_WORD_INDEX_REDIS_HOST, INVERT_KEY_WORD_INDEX_REDIS_PORT
+from aggregator.settings import RESPONSE_CACHE_REDIS_DB, WORD_CACHE_REDIS_DB, COUPLE_WORD_REDIS_DB,\
+    INVERT_KEY_WORD_INDEX_REDIS_DB, WORD_CACHE_REDIS_DB, INVERT_KEY_WORD_INDEX_REDIS_DB, \
+    INVERT_TEXT_INDEX_REDIS_DB, QUERY_TEXT_CACHE_REDIS_DB, SYNONYM_WORD_REDIS_DB, REDIS_HOST
 from aggregator.celery import app
 
 
 def get_response_from_cache(text):
-    r = redis.Redis(host=RESPONSE_CACHE_REDIS_HOST, port=RESPONSE_CACHE_REDIS_PORT)
+    r = redis.Redis(db=RESPONSE_CACHE_REDIS_DB, host=REDIS_HOST)
     key_words = lemmatization(text)
 
     if len(key_words) == 1:
@@ -16,7 +16,6 @@ def get_response_from_cache(text):
 
     processed_key_words = sorted(list(map(str.lower, key_words)))
     answer = r.zrange(str(processed_key_words), 0, -1)
-
     if answer:
         incr_query_text_to_cache.delay(text)
         incr_words_to_cache.delay(processed_key_words)
@@ -28,13 +27,12 @@ def get_response_from_cache(text):
         if answer:
             incr_query_text_to_cache.delay(text)
             r.zadd(str(processed_key_words), answer)
-
     return list(answer)
 
 
 @app.task
 def incr_words_to_cache(words):
-    r = redis.Redis(host=WORD_CACHE_REDIS_HOST, port=WORD_CACHE_REDIS_PORT)
+    r = redis.Redis(db=WORD_CACHE_REDIS_DB, host=REDIS_HOST)
     for word in words:
         if r.exists(word):
             r.incr(word)
@@ -44,7 +42,7 @@ def incr_words_to_cache(words):
 
 @app.task
 def incr_query_text_to_cache(query):
-    r = redis.Redis(host=QUERY_TEXT_CACHE_REDIS_HOST, port=QUERY_TEXT_CACHE_REDIS_PORT)
+    r = redis.Redis(db=QUERY_TEXT_CACHE_REDIS_DB, host=REDIS_HOST)
     if r.exists(query):
         r.incr(query)
     else:
@@ -52,14 +50,14 @@ def incr_query_text_to_cache(query):
 
 
 def get_possible_query_list(cur_query):
-    r = redis.Redis(host=QUERY_TEXT_CACHE_REDIS_HOST, port=QUERY_TEXT_CACHE_REDIS_PORT)
+    r = redis.Redis(db=QUERY_TEXT_CACHE_REDIS_DB, host=REDIS_HOST)
     possible_query_list = r.keys(cur_query + '*')
     possible_query_list.sort(key=lambda query: r.get(query))
     return [query.decode("utf-8") for query in possible_query_list]
 
 
 def get_cache_texts_id_for_word(word):
-    r = redis.Redis(host=INVERT_KEY_WORD_INDEX_REDIS_HOST, port=INVERT_KEY_WORD_INDEX_REDIS_PORT)
+    r = redis.Redis(db=INVERT_KEY_WORD_INDEX_REDIS_DB, host=REDIS_HOST)
     value = r.smembers(word)
     if value:
         return value
@@ -72,7 +70,7 @@ def get_cache_texts_id_for_word(word):
 
 
 def find_word_without_error_or_none(word_with_error):
-    r = redis.Redis(host=WORD_CACHE_REDIS_HOST, port=WORD_CACHE_REDIS_PORT)
+    r = redis.Redis(db=WORD_CACHE_REDIS_DB, host=REDIS_HOST)
     words = list(key.decode('utf-8') for key in r.keys('*'))
     more_closer_word = (None, 0)
     for i in range(len(word_with_error)):

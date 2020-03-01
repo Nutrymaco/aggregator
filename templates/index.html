@@ -3,11 +3,12 @@
   <head>
     <meta charset="UTF-8">
     <title>Page</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href={{ static("style/style.css") }}>
   </head>
   <body>
     <div class="search">
-      <form class="search__form" id="search-form" action="/vacancies" method="GET">
+      <form class="search__form" id="search-form" method="POST">
+          <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
         <div class="control-group " role="group">
           <span class="text-field  ">
             <span class="text-field__control">
@@ -21,6 +22,6 @@
       </form>
       <div class="search__autocomplete" id="search-autocomplete"></div>
     </div>
-    <script type="text/javascript" src="bundle.js"></script>
+    <script type="text/javascript" src={{ static("bundle.js") }}></script>
   </body>
 </html>

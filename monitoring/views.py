@@ -5,7 +5,7 @@ import redis
 
 def cached_query(request):
     if request.method == 'GET':
-        r = redis.Redis(host=settings.RESPONSE_CACHE_REDIS_HOST, port=settings.RESPONSE_CACHE_REDIS_PORT)
+        r = redis.Redis(host=settings.REDIS_HOST, db=settings.RESPONSE_CACHE_REDIS_DB)
         redis_keys = r.keys('*')
         answer_dict = list()
         for key in redis_keys:
@@ -18,7 +18,7 @@ def cached_query(request):
 
 def key_words_invert_index(request):
     if request.method == 'GET':
-        r = redis.Redis(host=settings.INVERT_KEY_WORD_INDEX_REDIS_HOST, port=settings.INVERT_KEY_WORD_INDEX_REDIS_PORT)
+        r = redis.Redis(host=settings.REDIS_HOST, db=settings.INVERT_KEY_WORD_INDEX_REDIS_DB)
         redis_keys = r.keys('*')
         answer_dict = list()
         for key in redis_keys:
@@ -31,7 +31,7 @@ def key_words_invert_index(request):
 
 def query_statistic(request):
     if request.method == 'GET':
-        r = redis.Redis(host=settings.QUERY_TEXT_CACHE_REDIS_HOST, port=settings.QUERY_TEXT_CACHE_REDIS_PORT)
+        r = redis.Redis(db=settings.QUERY_TEXT_CACHE_REDIS_DB, host=settings.REDIS_HOST)
         redis_keys = r.keys('*')
         answer_dict = list()
         for key in redis_keys:

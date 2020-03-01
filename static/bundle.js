@@ -3685,7 +3685,7 @@
     return `?${stringifiedParams}`
   }
 
-  const baseUrl = 'http://127.0.0.1:5000';
+  const baseUrl = 'http://127.0.0.1:8000';
   const searchForm = document.querySelector('#search-form');
   const searchField = document.querySelector('#search-field');
   const searchAutocomplete = document.querySelector('#search-autocomplete');
@@ -3697,7 +3697,7 @@
 
   function getSuggestionsRequest(baseUrl, text) {
     const params = stringifyParams({ text });
-    return fetch(`${baseUrl}/api/autocomplete${params}`)
+    return fetch(`${baseUrl}/api/autocomplete/${params}`)
       .then((res) => res.json())
   }
 
@@ -3708,7 +3708,6 @@
   }
 
   function renderSuggestions({ text, items }) {
-    console.log(document.activeElement);
     return `
     <div class="suggestions">
       <ul class="suggestions__list">
@@ -3734,9 +3733,8 @@
     // Because of async requests, we should use 'flatMap' to get a single stream
     .flatMap((text) => Kefir.fromPromise(getSuggestionsRequest(baseUrl, text)))
     .debounce(250)
-    .spy()
-    .map(renderSuggestions)
-    .onValue((html) => searchAutocomplete.innerHTML = html);
+    .spy();
+
 
   const html = searchResult
     .map(renderSuggestions)

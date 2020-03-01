@@ -256,11 +256,11 @@ select:-moz-focusring {
 
 .search__form {
   position: relative; }
-
+/*
 .search__autocomplete {
   position: absolute;
   top: 100%;
-  display: none; }
+  display: block; }
   .search__autocomplete--visible {
     display: block; }
 
@@ -282,3 +282,5 @@ select:-moz-focusring {
     cursor: pointer; }
     .suggestions__item:hover {
       background-color: rgba(255, 255, 255, 0.075); }
+
+ */

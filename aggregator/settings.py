@@ -100,6 +100,7 @@ DATABASES = {
 }
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 20000
 
+
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -139,28 +140,21 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Redis settings
+REDIS_HOST = 'redis'
 
-INVERT_KEY_WORD_INDEX_REDIS_HOST = 'redis_invert_key_word_index'
-INVERT_KEY_WORD_INDEX_REDIS_PORT = 6379
+INVERT_KEY_WORD_INDEX_REDIS_DB = 1
 
-RESPONSE_CACHE_REDIS_HOST = 'redis_cache_response'
-RESPONSE_CACHE_REDIS_PORT = 6379
+RESPONSE_CACHE_REDIS_DB = 2
 
-WORD_CACHE_REDIS_HOST = 'redis_word_cache'
-WORD_CACHE_REDIS_PORT = 6379
+WORD_CACHE_REDIS_DB = 3
 
-QUERY_TEXT_CACHE_REDIS_HOST = 'redis_query_text'
-QUERY_TEXT_CACHE_REDIS_PORT = 6379
+QUERY_TEXT_CACHE_REDIS_DB = 4
 
-COUPLE_WORD_REDIS_HOST = 'redis_couple_word'
-COUPLE_WORD_REDIS_PORT = 6379
+COUPLE_WORD_REDIS_DB = 5
 
-SYNONYM_WORD_REDIS_HOST = 'redis_synonym_word'
-SYNONYM_WORD_REDIS_PORT = 6379
+SYNONYM_WORD_REDIS_DB = 6
 
-INVERT_TEXT_INDEX_REDIS_HOST = 'redis_invert_text_index'
-INVERT_TEXT_INDEX_REDIS_PORT = 6379
-
+INVERT_TEXT_INDEX_REDIS_DB = 7
 
 # celery settings
 

@@ -8,14 +8,13 @@ import json
 
 
 def vacancies(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         text = request.POST['text']
 
         id_vacancies = get_response_from_cache(text)
-        vacancy_list = Vacancy.objects
-            .filter(id__in=id_vacancies)
+        vacancy_list = Vacancy.objects\
+            .filter(id__in=id_vacancies)\
             .values('name', 'short_description', 'company', 'salary_from', 'salary_to', 'url')
-
         return render(request, 'vacancies.html', {'vacancy_list': vacancy_list})
     return render(request, 'index.html')
 
@@ -35,7 +34,7 @@ def possible_query_list(request):
             return HttpResponse('{"items":[], "text":""')
 
 
-def api_vacanices(request):
+def api_vacancies(request):
     if request.method == 'GET':
         text = request.POST['text']
         id_vacancies = get_response_from_cache(text)
